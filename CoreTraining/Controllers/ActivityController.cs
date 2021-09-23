@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using CoreTraining.Models;
-using Microsoft.Extensions.Configuration;
+using System.Linq;
+using AutoMapper;
+using CoreTraining.ViewModels;
 
 namespace CoreTraining.Controllers
 {
@@ -11,40 +10,22 @@ namespace CoreTraining.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
+        private readonly HubContext _context;
 
-    public ActivityController(IConfiguration configuration)
+        public ActivityController(
+            IMapper mapper,
+            HubContext context)
         {
-            _configuration = configuration;
+            _mapper = mapper;
+            _context = context;
         }
+        
         [HttpGet]
-        public IEnumerable<Activity> Get()
+        public IEnumerable<ActivityViewModel> Get()
         {
-            var activities = new List<Activity>();
-
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("HubDatabase")))
-            {
-                const string sql = "SELECT Id, UniqueReferenceCode, CreationTime, QuotingRentMinId, QuotingRentMaxId FROM Activity";
-
-                connection.Open();
-                using SqlCommand command = new SqlCommand(sql, connection);
-                using SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    var activity = new Activity()
-                    {
-                        Id = new Guid(reader["Id"].ToString() ?? string.Empty),
-                        CreationTime = DateTimeOffset.Parse(reader["CreationTime"].ToString() ?? string.Empty),
-                        QuotingRentMinId = new Guid(reader["QuotingRentMinId"].ToString() ?? string.Empty),
-                        QuotingRentMaxId = new Guid(reader["QuotingRentMaxId"].ToString() ?? string.Empty),
-                    };
-
-                    activities.Add(activity);
-                }
-            }
-
-            return activities;
+            var activities = _context.Activity.ToList();
+            return _mapper.Map<List<ActivityViewModel>>(activities);
         }
     }
 }
