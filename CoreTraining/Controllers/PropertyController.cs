@@ -1,32 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using AutoMapper;
 using CoreTraining.Models;
 using CoreTraining.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoreTraining.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ActivityController : ControllerBase
+    public class PropertyController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly HubContext _context;
 
-        public ActivityController(
+        public PropertyController(
             IMapper mapper,
             HubContext context)
         {
             _mapper = mapper;
             _context = context;
         }
-
+        
         [HttpGet]
-        public IEnumerable<ActivityViewModel> Get()
+        public PropertyViewModel Get(Guid id)
         {
-            var activities = _context.Activities.ToList();
-            return _mapper.Map<List<ActivityViewModel>>(activities);
+            var property = _context.Properties
+                .Include(x => x.Address)
+                .SingleOrDefault(x => x.Id == id);
+            return property != null ? _mapper.Map<PropertyViewModel>(property) : null;
         }
     }
 }

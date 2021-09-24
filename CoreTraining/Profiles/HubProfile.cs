@@ -9,6 +9,8 @@ namespace CoreTraining.Profiles
         public HubProfile()
         {
             CreateMap<Activity, ActivityViewModel>();
+            CreateMap<Property, PropertyViewModel>();
+            CreateMap<Address, AddressViewModel>();
         }
     }
 }
