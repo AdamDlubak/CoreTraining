@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/obj-gc-api-09-2021/apis/CoreTrainingApi",
+      "type": "apis.azure",
+      "apiEndpoint": "https://obj-gc-api-09-2021.azure-api.net/coreTraining"
+    },
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/objgcserver/databases/obj-gc-sql-09-2021",
+      "type": "mssql.azure",
+      "connectionId": "HubDatabase",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

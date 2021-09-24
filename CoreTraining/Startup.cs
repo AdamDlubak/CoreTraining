@@ -29,12 +29,8 @@ namespace CoreTraining
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
-            
-            //services.AddDbContext<HubContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("HubDatabase")));
-            
-            services.AddDbContext<HubContext>();
 
+            services.AddDbContext<HubContext>();
             
             services.AddSwaggerGen(c =>
             {
@@ -51,6 +47,9 @@ namespace CoreTraining
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CoreTraining v1"));
             }
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CoreTraining v1"));
 
             app.UseHttpsRedirection();
 
